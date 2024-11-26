@@ -1,3 +1,6 @@
+#Script d'analyse de parc informatique kogus.io - Vincent BLIN 24/11/2024
+#contact : vincent@kogus.io
+
 # Variables
 $outputCsv = "$env:TEMP\system_info.csv"
 $emailRecipient = "stat@kogus.io"
@@ -5,16 +8,18 @@ $emailRecipient = "stat@kogus.io"
 # Affichage du logo
 Write-Host "  _  __                       _       " -ForegroundColor Cyan
 Write-Host " | |/ /___   __ _ _   _ ___  (_) ___  " -ForegroundColor Cyan
-Write-Host " | ' // _ \ / _` | | | / __| | |/ _ \ " -ForegroundColor Cyan
-Write-Host " | . \ (_) | (_| | |_| \__ \_| | (_)| " -ForegroundColor Cyan
+Write-Host " | ' // _ \ / _`  | | | / __| | |/ _ \ " -ForegroundColor Cyan
+Write-Host " | . \ (_) | (_| | |_| \__ \_| | (_) | " -ForegroundColor Cyan
 Write-Host " |_|\_\___/ \__, |\__,_|___(_)_|\___/ " -ForegroundColor Cyan
 Write-Host "            |___/                     " -ForegroundColor Cyan
 Write-Host "                                      " -ForegroundColor Cyan
 Write-Host "**************************************" -ForegroundColor Cyan
+Write-Host "             by not.it                " -ForegroundColor Cyan
+Write-Host "                                      " -ForegroundColor Cyan
 
-# Affichage du message de patience et lancement du chronomètre
+# Affichage du message de patience 
 Write-Host "Analyse du systeme en cours" -ForegroundColor Yellow
-$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
 
 # Barre de chargement dynamique
 $totalSteps = 20
@@ -51,10 +56,8 @@ $csvContent = @(
 )
 $csvContent | Out-File -FilePath $outputCsv -Encoding UTF8
 
-# Arrêt du chronomètre et affichage du temps 
-$stopwatch.Stop()
-elapsed_time = $stopwatch.Elapsed
-Write-Host "Analyse terminée en $($elapsed_time.Hours) heures, $($elapsed_time.Minutes) minutes, $($elapsed_time.Seconds) secondes." -ForegroundColor Green
+# Affichage
+Write-Host "Analyse terminee" -ForegroundColor Green
 
 # Création d'un email dans Outlook avec le fichier CSV en pièce jointe
 $outlook = New-Object -ComObject Outlook.Application
