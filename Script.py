@@ -1,12 +1,8 @@
-# SCript kogus en python
-# vincent BLIN 27/11/24
-
 import psutil
 import platform
-import smtplib
 import os
-from email.message import EmailMessage
 import time
+import win32com.client as win32
 
 # Variables
 output_csv = os.path.join(os.getenv('TEMP'), 'system_info.csv')
@@ -65,22 +61,15 @@ with open(output_csv, 'w') as f:
 elapsed_time = time.time() - start_time
 print(f"\nAnalyse terminée en {int(elapsed_time // 3600)} heures, {int((elapsed_time % 3600) // 60)} minutes, {int(elapsed_time % 60)} secondes.\n")
 
-# Création et envoi de l'email
-msg = EmailMessage()
-msg['Subject'] = "Informations de configuration de l'ordinateur"
-msg['From'] = "your_email@example.com"
-msg['To'] = email_recipient
-msg.set_content("Veuillez trouver en pièce jointe les informations sur la configuration de cet ordinateur.")
-
-with open(output_csv, 'rb') as f:
-    msg.add_attachment(f.read(), maintype='application', subtype='octet-stream', filename='system_info.csv')
-
-# Configurer l'envoi d'email (à adapter avec vos informations SMTP)
+# Création de l'email dans Outlook avec le fichier CSV en pièce jointe
 try:
-    with smtplib.SMTP('smtp.example.com', 587) as server:
-        server.starttls()
-        server.login('your_email@example.com', 'your_password')
-        server.send_message(msg)
-        print("Email envoyé avec succès.")
+    outlook = win32.Dispatch('outlook.application')
+    mail = outlook.CreateItem(0)
+    mail.To = email_recipient
+    mail.Subject = "Informations de configuration de l'ordinateur"
+    mail.Body = "Veuillez trouver en pièce jointe les informations sur la configuration de cet ordinateur."
+    mail.Attachments.Add(output_csv)
+    mail.Display()  # Ouvre le mail dans Outlook prêt à être envoyé
+    print("Email prêt à être envoyé dans Outlook.")
 except Exception as e:
-    print(f"Erreur lors de l'envoi de l'email : {e}")
+    print(f"Erreur lors de la création de l'email dans Outlook : {e}")
